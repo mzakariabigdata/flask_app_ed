@@ -1,9 +1,21 @@
 from flask import Flask, Blueprint, blueprints
 from api.restplus import api_v1, api_v2
 from api.book.endpoints.book import ns_books
+from flask_migrate import Migrate
+from dba.models import db
+
+migrate = Migrate()
+
+def configure_app(flask_app):
+
+    flask_app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+    flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+
 
 def initialize_app(flask_app):
     
+    configure_app(flask_app)
+
     blueprint_api_v1 = Blueprint('api_v1', __name__, url_prefix='/api/v1')
     blueprint_api_v2 = Blueprint('api_v2', __name__, url_prefix='/api/v2')
 
@@ -16,6 +28,10 @@ def initialize_app(flask_app):
     flask_app.register_blueprint(blueprint_api_v2)
     # ns_movies = api.namespace('movies', description = "Movies operations")
     
+
+    db.init_app(flask_app)
+    migrate.init_app(flask_app, db)
+
     @flask_app.route('/')
     def hello_world_1():
         return 'Hello, Zakaria MORCHID!'

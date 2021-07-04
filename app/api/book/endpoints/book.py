@@ -1,21 +1,37 @@
 from flask_restplus import Resource, Namespace
+from flask import request, jsonify
 from api.restplus import api_v1
+from dba.models import Book
+from api.book.api_definition import book_def
+from api.book.domain_logic import create_book
+from dba.models import db
+from sqlalchemy.orm.exc import NoResultFound
 
 ns_books = Namespace('books', description = "Books operations")
 
 @ns_books.route('/')
 class BooksList(Resource):
     
+    @api_v1.marshal_with(book_def)
     def get(self):
         """
         returns a list of books
         """
-        return {'hello': 'world'}
+        try:
+            res = Book.query.all()
+        except:
+            return None, 404
+        return res
     
+    @api_v1.expect(book_def)
     def post(self):
         """
         Add a new book to the list
         """
+        try:
+            f = Book.query.filter(Book.title == request.json.get('title')).one()
+        except NoResultFound as e:
+            res = create_book(request.json)
         return True, 201
 
     def put(self):
@@ -37,7 +53,7 @@ class BooksList(Resource):
         return True, 205
 
 @ns_books.route('/<string:title>')
-class Book(Resource):
+class BookItem(Resource):
         
     def get(self):
         """
@@ -45,17 +61,31 @@ class Book(Resource):
         """
         return {'hello': 'world'}
     
-    def post(self):
+    @api_v1.expect(book_def)
+    def post(self, title):
         """
         Add a new book to the list
         """
+        try:
+            f = Book.query.filter(Book.title == request.json.get('title')).one()
+        except NoResultFound as e:
+            res = create_book(request.json)
         return True, 201
 
-    def put(self):
+    @api_v1.expect(book_def)
+    def put(self, title):
         """
         Update/Replace a selected book
         """
-        return True, 405
+        try:
+            f = Book.query.filter(Book.title == title).one()
+            num_rows_updated = Book.query.filter_by(title=title).update(dict(title=request.json.get('title')))
+            print(num_rows_updated)
+            db.session.commit()
+            # res = update_book(request.json)
+        except NoResultFound as e:
+            return False, 404
+        return True, 201
     
     def patch(self):
         """
@@ -63,10 +93,19 @@ class Book(Resource):
         """
         return True, 405
 
-    def delete(self):
+    # @api_v1.expect(book_def)
+    def delete(self, title):
         """
         delete a selected book
         """
+        try:
+            f = Book.query.filter(Book.title == title).one()
+            num_rows_updated = Book.query.filter_by(title=title).delete()
+            print(num_rows_updated)
+            db.session.commit()
+            # res = update_book(request.json)
+        except NoResultFound as e:
+            return False, 404
         return True, 205
 
 
