@@ -16,10 +16,12 @@ class Config:
 
 class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, "app.sqlite")
+    DATABASE = "app.sqlite"
     IMAGE_UPLOADS = os.path.join(basedir, "uploads")
 
 class TestingConfig(Config):
     TESTING = True
+    DATABASE = "testing_db.sqlite"
     SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, "testing_db.sqlite")
     IMAGE_UPLOADS = os.path.join(basedir, "uploads")
 

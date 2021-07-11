@@ -1,5 +1,6 @@
 from flask_restplus import Resource, Namespace
 from flask import request, jsonify
+import requests
 from api.restplus import api_v1
 from dba.models import Book
 from api.book.api_definition import book_def
@@ -29,6 +30,8 @@ class BooksList(Resource):
         Add a new book to the list
         """
         try:
+            print("________zaal___________________________________")
+            print(requests)
             f = Book.query.filter(Book.title == request.json.get('title')).one()
         except NoResultFound as e:
             res = create_book(request.json)
@@ -64,7 +67,7 @@ class BookItem(Resource):
             res = Book.query.filter(Book.title == title).one()
         except NoResultFound as e:
             return False, 404
-        return res, 201
+        return res, 200
     
     @api_v1.expect(book_def)
     def post(self, title):

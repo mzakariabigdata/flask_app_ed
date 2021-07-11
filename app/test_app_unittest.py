@@ -1,13 +1,47 @@
 import os
+import json
 import unittest
+from unittest import mock
 # from config import basedir
 from app import create_app
 from dba.models import db
+import requests
+from unittest.mock import patch
+
 import click
 
 from dba.models import Book
 
-class TestExample(unittest.TestCase):
+class TestAPI(unittest.TestCase):
+
+    @classmethod
+    def setUp(cls):
+        # Happens before each test
+        app = create_app(config_env="testing")
+        cls.app_ctx = app.app_context()
+        cls.app_ctx.push()
+        cls.app_test_client = app.test_client()
+        db.create_all()
+
+    @classmethod
+    def tearDown(cls):
+        # Happens after each test
+        db.session.remove()
+        db.drop_all()
+        cls.app_ctx.pop()
+
+    @patch('requests.post')
+    def test_post_book(self, mock_post):
+        info = {"title": "unittest", "author": "test hello"}
+        resp = requests.post("/api/v1/books/", data=json.dumps(info), headers={'Content-Type': 'application/json'})
+        mock_post.assert_called_with("/api/v1/books/", data=json.dumps(info), headers={'Content-Type': 'application/json'})
+        # resp = self.app_test_client.get("/api/v1/books/unittest")
+        # print(resp.data)
+        # self.assertEqual(resp, info)
+        # mock_post.assert_called_with("/api/v1/books/flask", data=json.dumps(info), headers={'Content-Type': 'application/json'})
+
+
+class TestFront(unittest.TestCase):
 
     @classmethod
     def setUp(cls):
@@ -34,7 +68,7 @@ class TestExample(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
 
     def test_mor_route(self):
-        resp = self.app_test_client.get("/morr")
+        resp = self.app_test_client.get("/mor")
         self.assertEqual(resp.status_code, 200)
 
     @unittest.skip("demonstrating skipping")
