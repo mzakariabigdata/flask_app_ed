@@ -40,11 +40,11 @@ class BooksList(Resource):
         """
         return True, 405
     
-    def patch(self):
-        """
-        Update/Modify a selected book
-        """
-        return True, 405
+    # def patch(self):
+    #     """
+    #     Update/Modify a selected book
+    #     """
+    #     return True, 405
 
     def delete(self):
         """
@@ -54,12 +54,17 @@ class BooksList(Resource):
 
 @ns_books.route('/<string:title>')
 class BookItem(Resource):
-        
-    def get(self):
+    
+    @api_v1.marshal_with(book_def)
+    def get(self, title):
         """
         returns a list of books
         """
-        return {'hello': 'world'}
+        try:
+            res = Book.query.filter(Book.title == title).one()
+        except NoResultFound as e:
+            return False, 404
+        return res, 201
     
     @api_v1.expect(book_def)
     def post(self, title):
@@ -87,11 +92,11 @@ class BookItem(Resource):
             return False, 404
         return True, 201
     
-    def patch(self):
-        """
-        Update/Modify a selected book
-        """
-        return True, 405
+    # def patch(self):
+    #     """
+    #     Update/Modify a selected book
+    #     """
+    #     return True, 405
 
     # @api_v1.expect(book_def)
     def delete(self, title):

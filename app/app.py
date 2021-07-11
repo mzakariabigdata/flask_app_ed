@@ -3,19 +3,13 @@ from api.restplus import api_v1, api_v2
 from api.book.endpoints.book import ns_books
 from flask_migrate import Migrate
 from dba.models import db
+import config
+import os
 
 migrate = Migrate()
 
-def configure_app(flask_app):
-
-    flask_app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
-    flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-
-
 def initialize_app(flask_app):
     
-    configure_app(flask_app)
-
     blueprint_api_v1 = Blueprint('api_v1', __name__, url_prefix='/api/v1')
     blueprint_api_v2 = Blueprint('api_v2', __name__, url_prefix='/api/v2')
 
@@ -40,11 +34,16 @@ def initialize_app(flask_app):
     def hello_world_zak9():
         return 'Hello, Zakaria!'
 
+    @flask_app.route('/mor')
+    def hello_world_mor9():
+        return 'Hello, Zakaria!'
     
-def create_app(debug=False):
+def create_app(debug=False, config_env='development'):
     """ Create an application """
     app = Flask(__name__)
-
+    
+    app.config.from_object("config.{}Config".format(config_env.capitalize()))
+    
     initialize_app(app)
 
     return app
