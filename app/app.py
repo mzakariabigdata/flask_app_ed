@@ -24,6 +24,7 @@ def initialize_app(flask_app):
     
 
     db.init_app(flask_app)
+
     migrate.init_app(flask_app, db)
 
     @flask_app.route('/')
@@ -43,7 +44,6 @@ def create_app(debug=False, config_env='development'):
     app = Flask(__name__)
     
     app.config.from_object("config.{}Config".format(config_env.capitalize()))
-    
     initialize_app(app)
 
     return app

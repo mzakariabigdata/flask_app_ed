@@ -7,6 +7,7 @@ from api.book.api_definition import book_def
 from api.book.domain_logic import create_book
 from dba.models import db
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import OperationalError
 
 ns_books = Namespace('books', description = "Books operations")
 
@@ -53,7 +54,13 @@ class BooksList(Resource):
         """
         delete a selected book
         """
-        return True, 205
+        
+        try:
+            Book.query.delete()
+            db.session.commit()
+        except:
+            return False, 500
+        return True, 200
 
 @ns_books.route('/<string:title>')
 class BookItem(Resource):
@@ -87,13 +94,15 @@ class BookItem(Resource):
         """
         try:
             f = Book.query.filter(Book.title == title).one()
-            num_rows_updated = Book.query.filter_by(title=title).update(dict(title=request.json.get('title')))
+            num_rows_updated = Book.query.filter_by(title=title).update(dict(author=request.json.get('author')))
             print(num_rows_updated)
             db.session.commit()
             # res = update_book(request.json)
         except NoResultFound as e:
             return False, 404
-        return True, 201
+        except OperationalError as e:
+            return False, 500
+        return True, 200
     
     # def patch(self):
     #     """
@@ -114,7 +123,7 @@ class BookItem(Resource):
             # res = update_book(request.json)
         except NoResultFound as e:
             return False, 404
-        return True, 205
+        return True, 202
 
 
 # @ns_movies.route('/')
