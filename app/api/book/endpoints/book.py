@@ -21,7 +21,7 @@ class BooksList(Resource):
         """
         try:
             res = Book.query.all()
-        except:
+        except NoResultFound as e:
             return None, 404
         return res
     
@@ -58,7 +58,7 @@ class BooksList(Resource):
         try:
             Book.query.delete()
             db.session.commit()
-        except:
+        except OperationalError as e:
             return False, 500
         return True, 200
 
