@@ -1,13 +1,3 @@
-pipeline {
-    agent { docker { image 'python:3.5.1' } }
-    stages {
-        stage('build') {
-            steps {
-                sh 'python --version'
-            }
-        }
-    }
-}
 
 pipeline {
     agent none
@@ -22,10 +12,10 @@ pipeline {
         }
         stage('Sonarqube') {
             agent {
-                docker { image 'sonarqube' }
+                docker { image 'maven:3.3.3' }
             }
             steps {
-                sh 'ls'
+                sh 'mvn --version'
             }
         }
     }
