@@ -16,4 +16,4 @@ def test_str2():
 @pytest.mark.zak
 @pytest.mark.mor
 def test_str3():
-    assert 1 + 2 == 5
+    assert 1 + 2 == 3
