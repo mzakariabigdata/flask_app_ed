@@ -29,10 +29,10 @@ pipeline {
         }
         stage('Quality') {
             agent {
-                docker { image 'maven:3.3.3' }
+                docker { image 'sonarsource/sonar-scanner-cli' }
             }
             steps {
-                sh 'mvn --version'
+                sh 'sonar-scanner -D"sonar.projectKey=flask_app_ed" -D"sonar.sources=." -D"sonar.host.url=http://localhost:9000" -D"sonar.login=1f997e8aeffefaa2659eab04955f631960602389"'
             }
         }
         stage('Package'){
