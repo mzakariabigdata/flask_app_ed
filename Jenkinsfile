@@ -34,6 +34,11 @@ pipeline {
                 python -m pytest tests/ --junitxml=target/tests-report.xml  --cov-report term --cov-report xml:target/coverage-report.xml  --cov=app
                 '''
             }
+            post {
+                always{
+                    junit allowEmptyResults: true, testResults:'target/tests-report.xml'
+                }
+            }
         }
         stage('Quality') {
             agent {
