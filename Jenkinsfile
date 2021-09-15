@@ -12,7 +12,12 @@ pipeline {
                 docker { image 'python:3.5.1' }
             }
             steps {
-                sh 'python --version'
+                sh '''
+                python --version
+                python -m venv venv
+                . venv/bin/activate
+                which python 
+                '''
             }
         }
         stage('Sonarqube') {
