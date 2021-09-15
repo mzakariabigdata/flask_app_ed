@@ -32,7 +32,7 @@ pipeline {
                 docker { image 'sonarsource/sonar-scanner-cli' }
             }
             steps {
-                sh 'sonar-scanner -D"sonar.projectKey=flask_app_ed" -D"sonar.sources=." -D"sonar.host.url=http://localhost:9000" -D"sonar.login=1f997e8aeffefaa2659eab04955f631960602389"'
+                sh 'sonar-scanner -D"sonar.projectKey=flask_app_ed" -D"sonar.sources=." -D"sonar.host.url=http://172.28.116.174:9000" -D"sonar.login=1f997e8aeffefaa2659eab04955f631960602389"'
             }
         }
         stage('Package'){
