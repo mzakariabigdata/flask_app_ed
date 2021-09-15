@@ -27,9 +27,12 @@ pipeline {
                 echo 'Test stage'
             }
         }
-        stage('Quality'){
+        stage('Quality') {
+            agent {
+                docker { image 'maven:3.3.3' }
+            }
             steps {
-                echo 'Test Quality'
+                sh 'mvn --version'
             }
         }
         stage('Package'){
@@ -57,14 +60,7 @@ pipeline {
                 echo 'Test Xray'
             }
         }
-        stage('Sonarqube') {
-            agent {
-                docker { image 'maven:3.3.3' }
-            }
-            steps {
-                sh 'mvn --version'
-            }
-        }
+        
     }
     
         post {
