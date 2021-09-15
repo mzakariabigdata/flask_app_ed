@@ -46,6 +46,10 @@ pipeline {
             }
             steps {
                 sh 'sonar-scanner -D"sonar.projectKey=flask_app_ed" -D"sonar.sources=." -D"sonar.host.url=http://172.28.116.174:9000" -D"sonar.login=1f997e8aeffefaa2659eab04955f631960602389"'
+                def qg = waitForQualityGate()
+                if (qg.status != 'OK') {
+                    error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                }
             }
         }
         stage('Package'){
