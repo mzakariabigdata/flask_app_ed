@@ -17,6 +17,7 @@ pipeline {
                 python -m venv venv
                 . venv/bin/activate
                 which python 
+                ls -l
                 '''
             }
         }
