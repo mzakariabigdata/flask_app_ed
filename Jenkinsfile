@@ -18,6 +18,7 @@ pipeline {
                 . venv/bin/activate
                 which python 
                 ls -l
+                pip install -r requirements.txt
                 '''
             }
         }
