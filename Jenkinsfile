@@ -23,8 +23,16 @@ pipeline {
             }
         }
         stage('Test'){
+            agent {
+                docker { image 'python:3.7.0' }
+            }
             steps {
                 echo 'Test stage'
+                sh '''
+                . venv/bin/activate
+                pip install -r tests/requirements.txt
+                
+                '''
             }
         }
         stage('Quality') {
