@@ -15,10 +15,10 @@ class ValueError(Exception):
 def func1():
     raise ValueError('IndexError func1 raised')
 
-def test_case03():
-    with pytest.raises(Exception) as excinfo:
-        # assert (1,2,3) == (1,6,6)
-        func1()
-    print( str(excinfo))
-    raise str(excinfo.value) == 'IndexError func1 raised'
+# def test_case03():
+#     with pytest.raises(Exception) as excinfo:
+#         # assert (1,2,3) == (1,6,6)
+#         func1()
+#     print( str(excinfo))
+#     raise str(excinfo.value) == 'IndexError func1 raised'
 
