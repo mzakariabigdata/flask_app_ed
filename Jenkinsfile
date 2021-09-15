@@ -31,7 +31,7 @@ pipeline {
                 sh '''
                 . venv/bin/activate
                 pip install -r tests/requirements.txt
-                
+                python -m pytest tests/ --junitxml=target/tests-report.xml  --cov-report term --cov-report xml:target/coverage-report.xml  --cov=app
                 '''
             }
         }
