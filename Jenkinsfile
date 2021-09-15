@@ -9,7 +9,7 @@ pipeline {
         }
         stage('Build') {
             agent {
-                docker { image 'python:3.5.1' }
+                docker { image 'python:3.7.0' }
             }
             steps {
                 sh '''
