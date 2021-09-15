@@ -1,6 +1,13 @@
 
 pipeline {
-    agent none
+    agent any
+    stages {
+        stage('Checkout'){
+            steps{
+                git branch: 'main', url: 'https://github.com/mzakariabigdata/flask_app_ed'
+
+            }
+    }
     stages {
         stage('Build') {
             agent {
