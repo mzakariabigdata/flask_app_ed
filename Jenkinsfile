@@ -22,6 +22,41 @@ pipeline {
                 '''
             }
         }
+        stage('Test'){
+            steps {
+                echo 'Test stage'
+            }
+        }
+        stage('Quality'){
+            steps {
+                echo 'Test Quality'
+            }
+        }
+        stage('Package'){
+            steps {
+                echo 'Test Package'
+            }
+        }
+        stage('Tag'){
+            steps {
+                echo 'Test Tag'
+            }
+        }
+        stage('Publish'){
+            steps {
+                echo 'Test Publish'
+            }
+        }
+        stage('Xray'){
+            steps {
+                echo 'Test Xray'
+            }
+        }
+        stage('Invoke cd'){
+            steps {
+                echo 'Test Xray'
+            }
+        }
         stage('Sonarqube') {
             agent {
                 docker { image 'maven:3.3.3' }
