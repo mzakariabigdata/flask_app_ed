@@ -10,6 +10,7 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/mzakariabigdata/flask_app_ed'
             }
         }
+        
         stage('Build') {
             agent {
                 docker { image 'python:3.7.0' }
